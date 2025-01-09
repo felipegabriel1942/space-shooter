@@ -41,12 +41,10 @@ class Enemy extends SpriteAnimationComponent
           position: position + Vector2(0, height / 2),
         );
       },
-      autoStart: false,
+      autoStart: true,
     );
 
     game.add(_bulletSpawner);
-
-    _startShooting();
 
     add(
       RectangleHitbox(),
@@ -76,9 +74,5 @@ class Enemy extends SpriteAnimationComponent
       _bulletSpawner.removeFromParent();
       game.add(Explosion(position: position));
     }
-  }
-
-  void _startShooting() {
-    _bulletSpawner.timer.start();
   }
 }

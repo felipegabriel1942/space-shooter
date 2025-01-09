@@ -4,10 +4,11 @@ import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:space_shooter/game/components/enemy.dart';
-import 'package:space_shooter/game/components/player.dart';
+import 'package:space_shooter/game/actors/enemy.dart';
+import 'package:space_shooter/game/actors/player.dart';
 
-class SpaceShooterGame extends FlameGame with PanDetector, HasCollisionDetection {
+class SpaceShooterGame extends FlameGame
+    with PanDetector, HasCollisionDetection {
   late Player player;
 
   @override
