@@ -1,5 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flutter/services.dart';
 import 'package:space_shooter/game/components/bullet.dart';
 import 'package:space_shooter/game/components/enemy_bullet.dart';
@@ -29,6 +30,8 @@ class Player extends SpriteAnimationComponent
   PlayerDirection playerDirection = PlayerDirection.none;
   PlayerAction playerAction = PlayerAction.none;
   final double moveSpeed = 300;
+  bool hitByEnemy = false;
+  int health = 3;
   Vector2 velocity = Vector2.zero();
 
   Player()
@@ -52,12 +55,30 @@ class Player extends SpriteAnimationComponent
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
 
-    if (other is EnemyBullet) {
-      stopShooting();
-      removeFromParent();
+    if (other is EnemyBullet && !hitByEnemy) {
+      --health;
+      hitByEnemy = true;
+
       other.removeFromParent();
-      _bulletSpawner.removeFromParent();
-      game.add(Explosion(position: position));
+
+      if (isDead()) {
+        stopShooting();
+        removeFromParent();
+        _bulletSpawner.removeFromParent();
+        game.add(Explosion(position: position));
+      } else {
+        add(
+          OpacityEffect.fadeOut(
+            EffectController(
+              alternate: true,
+              duration: 0.1,
+              repeatCount: 6,
+            ),
+          )..onComplete = () {
+              hitByEnemy = false;
+            },
+        );
+      }
     }
   }
 
@@ -71,6 +92,10 @@ class Player extends SpriteAnimationComponent
   void update(double dt) {
     _movePlayer(dt);
     super.update(dt);
+  }
+
+  bool isDead() {
+    return health == 0;
   }
 
   void _movePlayer(double dt) {
