@@ -8,7 +8,7 @@ import 'package:space_shooter/game/actors/enemy.dart';
 import 'package:space_shooter/game/actors/player.dart';
 
 class SpaceShooterGame extends FlameGame
-    with HasCollisionDetection, HasKeyboardHandlerComponents, TapCallbacks {
+    with HasCollisionDetection, HasKeyboardHandlerComponents, PanDetector {
   late Player player;
 
   @override
@@ -43,20 +43,14 @@ class SpaceShooterGame extends FlameGame
   }
 
   @override
-  void onTapDown(TapDownEvent event) {
+  void onPanStart(DragStartInfo info) {
     player.startShooting();
-    super.onTapDown(event);
+    super.onPanStart(info);
   }
 
   @override
-  void onLongTapDown(TapDownEvent event) {
-    player.startShooting();
-    super.onLongTapDown(event);
-  }
-
-  @override
-  void onTapUp(TapUpEvent event) {
+  void onPanEnd(DragEndInfo info) {
     player.stopShooting();
-    super.onTapUp(event);
+    super.onPanEnd(info);
   }
 }

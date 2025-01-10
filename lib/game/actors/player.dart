@@ -1,6 +1,5 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
 import 'package:space_shooter/game/components/bullet.dart';
 import 'package:space_shooter/game/components/enemy_bullet.dart';
@@ -25,8 +24,7 @@ class Player extends SpriteAnimationComponent
     with
         HasGameReference<SpaceShooterGame>,
         CollisionCallbacks,
-        KeyboardHandler,
-        TapCallbacks {
+        KeyboardHandler {
   late final SpawnComponent _bulletSpawner;
   PlayerDirection playerDirection = PlayerDirection.none;
   PlayerAction playerAction = PlayerAction.none;
@@ -41,9 +39,11 @@ class Player extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
-    await _loadPlayerAnimation();
     _addBulletSpawner();
+    await _loadPlayerAnimation();
+
     _addHitBox();
+    debugMode = true;
     return super.onLoad();
   }
 
@@ -64,7 +64,6 @@ class Player extends SpriteAnimationComponent
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     _updatePlayerDirection(keysPressed);
-
     return super.onKeyEvent(event, keysPressed);
   }
 

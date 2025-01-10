@@ -24,6 +24,7 @@ class Enemy extends SpriteAnimationComponent
 
   @override
   FutureOr<void> onLoad() async {
+    debugMode = true;
     animation = await game.loadSpriteAnimation(
       'enemy.png',
       SpriteAnimationData.sequenced(
