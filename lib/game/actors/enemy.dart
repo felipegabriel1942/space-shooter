@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:space_shooter/game/components/bullet.dart';
@@ -18,12 +20,10 @@ class Enemy extends SpriteAnimationComponent
 
   static const enemySize = 50.0;
 
-  final double _velocity = 250;
+  final double _velocity = 200;
 
   @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-
+  FutureOr<void> onLoad() async {
     animation = await game.loadSpriteAnimation(
       'enemy.png',
       SpriteAnimationData.sequenced(
@@ -49,6 +49,8 @@ class Enemy extends SpriteAnimationComponent
     add(
       RectangleHitbox(),
     );
+
+    return super.onLoad();
   }
 
   @override
