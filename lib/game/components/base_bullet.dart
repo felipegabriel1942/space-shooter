@@ -14,7 +14,7 @@ abstract class BaseBullet extends SpriteAnimationComponent
     this.shouldRotate = false,
     super.position,
   }) : super(
-          size: Vector2(25, 50),
+          size: Vector2(15, 35),
           anchor: Anchor.center,
         );
 
