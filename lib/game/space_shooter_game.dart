@@ -40,6 +40,8 @@ class SpaceShooterGame extends FlameGame
         area: Rectangle.fromLTWH(0, 0, size.x - 300, -Enemy.enemySize),
       ),
     );
+
+    overlays.add('Hud');
   }
 
   @override

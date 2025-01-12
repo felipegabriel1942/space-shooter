@@ -1,6 +1,7 @@
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:space_shooter/game/overlays/hud.dart';
 import 'package:space_shooter/game/space_shooter_game.dart';
 
 void main() async {
@@ -10,8 +11,11 @@ void main() async {
   await Flame.device.setLandscape();
 
   runApp(
-    GameWidget(
-      game: SpaceShooterGame(),
+    GameWidget<SpaceShooterGame>.controlled(
+      gameFactory: SpaceShooterGame.new,
+      overlayBuilderMap: {
+        'Hud': (_, game) => Hud(game: game),
+      },
     ),
   );
 }

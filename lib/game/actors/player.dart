@@ -6,6 +6,7 @@ import 'package:space_shooter/game/components/bullet.dart';
 import 'package:space_shooter/game/components/enemy_bullet.dart';
 import 'package:space_shooter/game/components/explosive.dart';
 import 'package:space_shooter/game/space_shooter_game.dart';
+import 'package:space_shooter/game/stores/player_store.dart';
 
 enum PlayerAction { none, shooting }
 
@@ -18,10 +19,12 @@ class Player extends SpriteAnimationComponent
   PlayerAction playerAction = PlayerAction.none;
   final double moveSpeed = 400;
   bool hitByEnemy = false;
-  int health = 3;
+  int maxHealth = 3;
   Vector2 velocity = Vector2.zero();
   double horizontalMovement = 0;
   double verticalMovement = 0;
+
+  PlayerStore playerStore = PlayerStore();
 
   Player()
       : super(
@@ -31,11 +34,11 @@ class Player extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
-    _addBulletSpawner();
     await _loadPlayerAnimation();
-
+    _addBulletSpawner();
     _addHitBox();
     debugMode = true;
+    playerStore.health = maxHealth;
     return super.onLoad();
   }
 
@@ -45,12 +48,12 @@ class Player extends SpriteAnimationComponent
     super.onCollisionStart(intersectionPoints, other);
 
     if (other is EnemyBullet && !hitByEnemy) {
-      --health;
+      playerStore.takeDamage(1);
       hitByEnemy = true;
 
       other.removeFromParent();
 
-      if (isDead()) {
+      if (playerStore.isDead()) {
         stopShooting();
         removeFromParent();
         _bulletSpawner.removeFromParent();
@@ -89,10 +92,6 @@ class Player extends SpriteAnimationComponent
 
     velocity.y = verticalMovement * moveSpeed;
     position.y += velocity.y * dt;
-  }
-
-  bool isDead() {
-    return health == 0;
   }
 
   Future<void> _loadPlayerAnimation() async {

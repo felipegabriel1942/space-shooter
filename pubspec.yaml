@@ -12,13 +12,17 @@ dependencies:
     sdk: flutter
   flame: ^1.8.1
   cupertino_icons: ^1.0.6
-
+  google_fonts: ^6.2.1
+  flutter_mobx: ^2.2.0+1
+  mobx: ^2.4.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^3.0.0
+  mobx_codegen: ^2.4.0
+  build_runner: ^2.4.7
 
 flutter:
   uses-material-design: true
