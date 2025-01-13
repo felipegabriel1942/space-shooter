@@ -19,7 +19,7 @@ class Player extends SpriteAnimationComponent
   PlayerAction playerAction = PlayerAction.none;
   final double moveSpeed = 400;
   bool hitByEnemy = false;
-  int maxHealth = 3;
+
   Vector2 velocity = Vector2.zero();
   double horizontalMovement = 0;
   double verticalMovement = 0;
@@ -38,7 +38,6 @@ class Player extends SpriteAnimationComponent
     _addBulletSpawner();
     _addHitBox();
     debugMode = true;
-    playerStore.health = maxHealth;
     return super.onLoad();
   }
 

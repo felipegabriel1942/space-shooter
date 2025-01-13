@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:space_shooter/game/components/bullet.dart';
 import 'package:space_shooter/game/components/enemy_bullet.dart';
 import 'package:space_shooter/game/components/explosive.dart';
+import 'package:space_shooter/game/components/health.dart';
 import 'package:space_shooter/game/space_shooter_game.dart';
 
 class Enemy extends SpriteAnimationComponent
@@ -76,6 +78,18 @@ class Enemy extends SpriteAnimationComponent
       other.removeFromParent();
       _bulletSpawner.removeFromParent();
       game.add(Explosion(position: position));
+
+      if (checkChance(10) && !game.player.playerStore.hasMaxHealth()) {
+        game.add(Health(position: position));
+      }
     }
+  }
+
+  bool checkChance(int chance) {
+    final random = Random();
+
+    final randomNumber = random.nextInt(100);
+
+    return randomNumber < chance;
   }
 }

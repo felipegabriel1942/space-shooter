@@ -59,7 +59,7 @@ class Hud extends StatelessWidget {
                       builder: (_) {
                         return LinearProgressIndicator(
                           value: game.player.playerStore.health /
-                              game.player.maxHealth,
+                              game.player.playerStore.maxHealth,
                           backgroundColor: Colors.grey,
                           valueColor:
                               const AlwaysStoppedAnimation<Color>(Colors.red),

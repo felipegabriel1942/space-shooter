@@ -24,6 +24,22 @@ mixin _$PlayerStore on _PlayerStore, Store {
     });
   }
 
+  late final _$maxHealthAtom =
+      Atom(name: '_PlayerStore.maxHealth', context: context);
+
+  @override
+  int get maxHealth {
+    _$maxHealthAtom.reportRead();
+    return super.maxHealth;
+  }
+
+  @override
+  set maxHealth(int value) {
+    _$maxHealthAtom.reportWrite(value, super.maxHealth, () {
+      super.maxHealth = value;
+    });
+  }
+
   late final _$_PlayerStoreActionController =
       ActionController(name: '_PlayerStore', context: context);
 
@@ -41,7 +57,8 @@ mixin _$PlayerStore on _PlayerStore, Store {
   @override
   String toString() {
     return '''
-health: ${health}
+health: ${health},
+maxHealth: ${maxHealth}
     ''';
   }
 }
