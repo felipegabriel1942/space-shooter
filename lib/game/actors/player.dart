@@ -53,22 +53,9 @@ class Player extends SpriteAnimationComponent
       other.removeFromParent();
 
       if (playerStore.isDead()) {
-        stopShooting();
-        removeFromParent();
-        _bulletSpawner.removeFromParent();
-        game.add(Explosion(position: position));
+        _handleDeath();
       } else {
-        add(
-          OpacityEffect.fadeOut(
-            EffectController(
-              alternate: true,
-              duration: 0.1,
-              repeatCount: 6,
-            ),
-          )..onComplete = () {
-              hitByEnemy = false;
-            },
-        );
+        _handleHit();
       }
     }
   }
@@ -87,10 +74,47 @@ class Player extends SpriteAnimationComponent
 
   void _updatePlayerPosition(double dt) {
     velocity.x = horizontalMovement * moveSpeed;
-    position.x += velocity.x * dt;
+
+    if (_inBoundariesX(dt)) {
+      position.x += velocity.x * dt;
+    }
 
     velocity.y = verticalMovement * moveSpeed;
-    position.y += velocity.y * dt;
+
+    if (_inBoundariesY(dt)) {
+      position.y += velocity.y * dt;
+    }
+  }
+
+  bool _inBoundariesX(double dt) {
+    return velocity.x * dt + position.x > size.x / 2 &&
+        velocity.x * dt + position.x < game.size.x - size.x / 2;
+  }
+
+  bool _inBoundariesY(double dt) {
+    return velocity.y * dt + position.y > size.y / 2 &&
+        velocity.y * dt + position.y < game.size.y - size.y / 2;
+  }
+
+  void _handleDeath() {
+    stopShooting();
+    removeFromParent();
+    _bulletSpawner.removeFromParent();
+    game.add(Explosion(position: position));
+  }
+
+  void _handleHit() {
+    add(
+      OpacityEffect.fadeOut(
+        EffectController(
+          alternate: true,
+          duration: 0.1,
+          repeatCount: 6,
+        ),
+      )..onComplete = () {
+          hitByEnemy = false;
+        },
+    );
   }
 
   Future<void> _loadPlayerAnimation() async {
