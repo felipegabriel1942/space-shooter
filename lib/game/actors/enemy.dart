@@ -60,13 +60,8 @@ class Enemy extends SpriteAnimationComponent
   @override
   void update(double dt) {
     super.update(dt);
-
-    position.y += dt * _velocity;
-
-    if (position.y > game.size.y) {
-      _bulletSpawner.removeFromParent();
-      removeFromParent();
-    }
+    _updatePosition(dt);
+    _removeWhenOutOfBound();
   }
 
   @override
@@ -101,5 +96,15 @@ class Enemy extends SpriteAnimationComponent
     final randomNumber = random.nextInt(100);
 
     return randomNumber < chance;
+  }
+
+  void _updatePosition(double dt) {
+    position.y += dt * _velocity;
+  }
+
+  void _removeWhenOutOfBound() {
+    if (position.y > game.size.y) {
+      removeFromParent();
+    }
   }
 }

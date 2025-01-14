@@ -7,6 +7,8 @@ import 'package:space_shooter/game/space_shooter_game.dart';
 
 class Health extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame>, CollisionCallbacks {
+  final double _velocity = 100;
+
   Health({super.position}) : super(size: Vector2.all(45));
 
   @override
@@ -30,6 +32,13 @@ class Health extends SpriteAnimationComponent
   }
 
   @override
+  void update(double dt) {
+    super.update(dt);
+    _updatePosition(dt);
+    _removeWhenOutOfBound();
+  }
+
+  @override
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Player) {
@@ -38,5 +47,15 @@ class Health extends SpriteAnimationComponent
     }
 
     super.onCollisionStart(intersectionPoints, other);
+  }
+
+  void _updatePosition(double dt) {
+    position.y += dt * _velocity;
+  }
+
+  void _removeWhenOutOfBound() {
+    if (position.y > game.size.y) {
+      removeFromParent();
+    }
   }
 }
