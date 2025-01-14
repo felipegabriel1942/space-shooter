@@ -1,61 +1,35 @@
 import 'dart:async';
 
-import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:space_shooter/game/actors/player.dart';
-import 'package:space_shooter/game/space_shooter_game.dart';
+import 'package:space_shooter/game/components/power_up.dart';
 
-class Health extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame>, CollisionCallbacks {
-  final double _velocity = 100;
+class Health extends PowerUp {
+  static const String _spriteSheet = 'health-power-up.png';
 
-  Health({super.position}) : super(size: Vector2.all(45));
+  Health({super.position})
+      : super(
+          velocity: 150,
+          size: Vector2.all(45),
+        );
 
   @override
-  FutureOr<void> onLoad() async {
+  void handleCollision(PositionComponent other) {
+    if (other is Player) {
+      other.playerStore.recoverHealth(1);
+      removeFromParent();
+    }
+  }
+
+  @override
+  Future<void> loadAnimation() async {
     animation = await game.loadSpriteAnimation(
-      'health-power-up.png',
+      _spriteSheet,
       SpriteAnimationData.sequenced(
         amount: 8,
         stepTime: .2,
         textureSize: Vector2(16, 16),
       ),
     );
-
-    add(
-      RectangleHitbox(collisionType: CollisionType.passive),
-    );
-
-    debugMode = true;
-
-    return super.onLoad();
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    _updatePosition(dt);
-    _removeWhenOutOfBound();
-  }
-
-  @override
-  void onCollisionStart(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Player) {
-      other.playerStore.recoverHealth(1);
-      removeFromParent();
-    }
-
-    super.onCollisionStart(intersectionPoints, other);
-  }
-
-  void _updatePosition(double dt) {
-    position.y += dt * _velocity;
-  }
-
-  void _removeWhenOutOfBound() {
-    if (position.y > game.size.y) {
-      removeFromParent();
-    }
   }
 }
