@@ -34,15 +34,17 @@ class Hud extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    '000000',
-                    style: GoogleFonts.pressStart2p(
-                      textStyle: const TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
+                  Observer(builder: (_) {
+                    return Text(
+                      game.player.playerStore.score.toString().padLeft(10, '0'),
+                      style: GoogleFonts.pressStart2p(
+                        textStyle: const TextStyle(
+                          fontSize: 25,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  )
+                    );
+                  })
                 ],
               ),
             ],

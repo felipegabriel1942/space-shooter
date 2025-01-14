@@ -40,6 +40,21 @@ mixin _$PlayerStore on _PlayerStore, Store {
     });
   }
 
+  late final _$scoreAtom = Atom(name: '_PlayerStore.score', context: context);
+
+  @override
+  int get score {
+    _$scoreAtom.reportRead();
+    return super.score;
+  }
+
+  @override
+  set score(int value) {
+    _$scoreAtom.reportWrite(value, super.score, () {
+      super.score = value;
+    });
+  }
+
   late final _$_PlayerStoreActionController =
       ActionController(name: '_PlayerStore', context: context);
 
@@ -58,7 +73,8 @@ mixin _$PlayerStore on _PlayerStore, Store {
   String toString() {
     return '''
 health: ${health},
-maxHealth: ${maxHealth}
+maxHealth: ${maxHealth},
+score: ${score}
     ''';
   }
 }

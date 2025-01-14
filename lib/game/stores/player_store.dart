@@ -11,6 +11,9 @@ abstract class _PlayerStore with Store {
   @observable
   int maxHealth = 3;
 
+  @observable
+  int score = 0;
+
   _PlayerStore() {
     health = maxHealth;
   }

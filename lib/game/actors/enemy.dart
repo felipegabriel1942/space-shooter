@@ -12,6 +12,10 @@ import 'package:space_shooter/game/space_shooter_game.dart';
 
 class Enemy extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame>, CollisionCallbacks {
+  static const enemySize = 50.0;
+  final double _velocity = 200;
+  static const _points = 100;
+
   late final SpawnComponent _bulletSpawner;
 
   Enemy({
@@ -21,13 +25,8 @@ class Enemy extends SpriteAnimationComponent
           anchor: Anchor.center,
         );
 
-  static const enemySize = 50.0;
-
-  final double _velocity = 200;
-
   @override
   FutureOr<void> onLoad() async {
-    debugMode = true;
     animation = await game.loadSpriteAnimation(
       'enemy.png',
       SpriteAnimationData.sequenced(
@@ -70,11 +69,12 @@ class Enemy extends SpriteAnimationComponent
     super.onCollisionStart(intersectionPoints, other);
 
     if (other is Bullet) {
-      removeFromParent();
       other.removeFromParent();
       _bulletSpawner.removeFromParent();
+      game.player.playerStore.score += _points;
       game.add(Explosion(position: position));
       _handlePowerUpDrop();
+      removeFromParent();
     }
   }
 

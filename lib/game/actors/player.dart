@@ -33,10 +33,9 @@ class Player extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
-    await _loadPlayerAnimation();
+    _loadPlayerAnimation();
     _addBulletSpawner();
     _addHitBox();
-    debugMode = true;
     return super.onLoad();
   }
 
@@ -116,7 +115,7 @@ class Player extends SpriteAnimationComponent
     );
   }
 
-  Future<void> _loadPlayerAnimation() async {
+  void _loadPlayerAnimation() async {
     animation = await game.loadSpriteAnimation(
       'player.png',
       SpriteAnimationData.sequenced(
