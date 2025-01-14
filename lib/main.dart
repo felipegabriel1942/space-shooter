@@ -11,11 +11,21 @@ void main() async {
   await Flame.device.setLandscape();
 
   runApp(
-    GameWidget<SpaceShooterGame>.controlled(
-      gameFactory: SpaceShooterGame.new,
-      overlayBuilderMap: {
-        'Hud': (_, game) => Hud(game: game),
-      },
+    MaterialApp(
+      home: Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(
+          child: AspectRatio(
+            aspectRatio: 400 / 600,
+            child: GameWidget<SpaceShooterGame>.controlled(
+              gameFactory: SpaceShooterGame.new,
+              overlayBuilderMap: {
+                'Hud': (_, game) => Hud(game: game),
+              },
+            ),
+          ),
+        ),
+      ),
     ),
   );
 }
