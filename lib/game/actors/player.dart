@@ -19,12 +19,11 @@ class Player extends SpriteAnimationComponent
   PlayerAction playerAction = PlayerAction.none;
   final double moveSpeed = 400;
   bool hitByEnemy = false;
-
   Vector2 velocity = Vector2.zero();
   double horizontalMovement = 0;
   double verticalMovement = 0;
-
   PlayerStore playerStore = PlayerStore();
+  final double bulletPeriod = 0.4;
 
   Player()
       : super(
@@ -99,7 +98,7 @@ class Player extends SpriteAnimationComponent
   void _handleDeath() {
     stopShooting();
     removeFromParent();
-    _bulletSpawner.removeFromParent();
+    _removeBulletSpawner();
     game.add(Explosion(position: position));
   }
 
@@ -132,7 +131,7 @@ class Player extends SpriteAnimationComponent
 
   void _addBulletSpawner() {
     _bulletSpawner = SpawnComponent(
-      period: .5,
+      period: bulletPeriod,
       selfPositioning: true,
       factory: (index) {
         return Bullet(
@@ -147,6 +146,10 @@ class Player extends SpriteAnimationComponent
     );
 
     game.add(_bulletSpawner);
+  }
+
+  void _removeBulletSpawner() {
+    _bulletSpawner.removeFromParent();
   }
 
   void _addHitBox() {
@@ -187,5 +190,13 @@ class Player extends SpriteAnimationComponent
     horizontalMovement += isRightKeyPressed ? 1 : 0;
     verticalMovement += isUpKeyPressed ? -1 : 0;
     verticalMovement += isDownKeyPressed ? 1 : 0;
+  }
+
+  void updateBulletPeriod(double newPeriod) {
+    _bulletSpawner.period = newPeriod;
+  }
+
+  void resetBulletPeriod() {
+    _bulletSpawner.period = bulletPeriod;
   }
 }

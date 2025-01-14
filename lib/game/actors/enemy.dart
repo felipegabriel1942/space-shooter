@@ -7,6 +7,7 @@ import 'package:space_shooter/game/components/bullet.dart';
 import 'package:space_shooter/game/components/enemy_bullet.dart';
 import 'package:space_shooter/game/components/explosive.dart';
 import 'package:space_shooter/game/components/health.dart';
+import 'package:space_shooter/game/components/rapid_fire.dart';
 import 'package:space_shooter/game/space_shooter_game.dart';
 
 class Enemy extends SpriteAnimationComponent
@@ -78,10 +79,19 @@ class Enemy extends SpriteAnimationComponent
       other.removeFromParent();
       _bulletSpawner.removeFromParent();
       game.add(Explosion(position: position));
+      _handlePowerUpDrop();
+    }
+  }
 
-      if (checkChance(10) && !game.player.playerStore.hasMaxHealth()) {
-        game.add(Health(position: position));
-      }
+  _handlePowerUpDrop() {
+    if (checkChance(10) && !game.player.playerStore.hasMaxHealth()) {
+      game.add(Health(position: position));
+      return;
+    }
+
+    if (checkChance(5)) {
+      game.add(RapidFire(position: position));
+      return;
     }
   }
 
