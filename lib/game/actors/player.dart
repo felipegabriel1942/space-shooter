@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:space_shooter/game/components/bullet.dart';
 import 'package:space_shooter/game/components/enemy_bullet.dart';
 import 'package:space_shooter/game/components/explosive.dart';
+import 'package:space_shooter/game/services/player_movement_service.dart';
 import 'package:space_shooter/game/space_shooter_game.dart';
 import 'package:space_shooter/game/stores/player_store.dart';
 
@@ -16,13 +17,12 @@ class Player extends SpriteAnimationComponent
         CollisionCallbacks,
         KeyboardHandler {
   late final SpawnComponent _bulletSpawner;
+  late final PlayerMovementService _movementService;
+  late final PlayerStore playerStore;
+
   PlayerAction playerAction = PlayerAction.none;
-  final double moveSpeed = 400;
   bool hitByEnemy = false;
   Vector2 velocity = Vector2.zero();
-  double horizontalMovement = 0;
-  double verticalMovement = 0;
-  PlayerStore playerStore = PlayerStore();
   final double bulletPeriod = 0.4;
 
   Player()
@@ -33,6 +33,8 @@ class Player extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
+    _movementService = PlayerMovementService(player: this, moveSpeed: 400);
+    playerStore = PlayerStore();
     _loadPlayerAnimation();
     _addBulletSpawner();
     _addHitBox();
@@ -60,7 +62,7 @@ class Player extends SpriteAnimationComponent
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    _updatePlayerMovement(keysPressed);
+    _movementService.updatePlayerMovement(keysPressed);
     return super.onKeyEvent(event, keysPressed);
   }
 
@@ -71,13 +73,9 @@ class Player extends SpriteAnimationComponent
   }
 
   void _updatePlayerPosition(double dt) {
-    velocity.x = horizontalMovement * moveSpeed;
-
     if (_inBoundariesX(dt)) {
       position.x += velocity.x * dt;
     }
-
-    velocity.y = verticalMovement * moveSpeed;
 
     if (_inBoundariesY(dt)) {
       position.y += velocity.y * dt;
@@ -167,28 +165,6 @@ class Player extends SpriteAnimationComponent
     if (_bulletSpawner.timer.isRunning()) {
       _bulletSpawner.timer.stop();
     }
-  }
-
-  void _updatePlayerMovement(Set<LogicalKeyboardKey> keysPressed) {
-    horizontalMovement = 0;
-    verticalMovement = 0;
-
-    final isLeftKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyA) ||
-        keysPressed.contains(LogicalKeyboardKey.arrowLeft);
-
-    final isRightKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyD) ||
-        keysPressed.contains(LogicalKeyboardKey.arrowRight);
-
-    final isUpKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyW) ||
-        keysPressed.contains(LogicalKeyboardKey.arrowUp);
-
-    final isDownKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyS) ||
-        keysPressed.contains(LogicalKeyboardKey.arrowDown);
-
-    horizontalMovement += isLeftKeyPressed ? -1 : 0;
-    horizontalMovement += isRightKeyPressed ? 1 : 0;
-    verticalMovement += isUpKeyPressed ? -1 : 0;
-    verticalMovement += isDownKeyPressed ? 1 : 0;
   }
 
   void updateBulletPeriod(double newPeriod) {

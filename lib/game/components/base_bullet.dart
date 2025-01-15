@@ -48,7 +48,7 @@ abstract class BaseBullet extends SpriteAnimationComponent
 
     position.y += dt * velocity;
 
-    if (position.y < -height) {
+    if (position.y > game.size.y || position.y < 0) {
       removeFromParent();
     }
   }
