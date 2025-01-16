@@ -5,7 +5,7 @@ class Explosion extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame> {
   Explosion({super.position})
       : super(
-          size: Vector2.all(150),
+          size: Vector2.all(75),
           anchor: Anchor.center,
           removeOnFinish: true,
         );

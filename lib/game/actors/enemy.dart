@@ -12,7 +12,7 @@ import 'package:space_shooter/game/space_shooter_game.dart';
 
 class Enemy extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame>, CollisionCallbacks {
-  static const enemySize = 50.0;
+  static const enemySize = 40.0;
   final double _velocity = 200;
   static const _points = 100;
 
